@@ -9,8 +9,8 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/go-kit/kit/log"
-	"github.com/go-kit/kit/log/level"
+	"github.com/go-kit/log"
+	"github.com/go-kit/log/level"
 
 	"example.com/order-service/httptransport"
 	"example.com/order-service/implementation"
@@ -46,7 +46,7 @@ func main() {
 	serverErrors := make(chan error, 1)
 
 	go func() {
-		level.Info(logger).Log("msg", "service started", "addr", *httpAddr)
+		_ = level.Info(logger).Log("msg", "service started", "addr", *httpAddr)
 		serverErrors <- server.ListenAndServe()
 	}()
 
@@ -57,14 +57,14 @@ func main() {
 	select {
 	case err := <-serverErrors:
 		if err != nil && err != http.ErrServerClosed {
-			level.Error(logger).Log("msg", "server error", "err", err)
+			_ = level.Error(logger).Log("msg", "server error", "err", err)
 		}
 	case <-stop:
 		ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 		defer cancel()
 
 		if err := server.Shutdown(ctx); err != nil {
-			level.Error(logger).Log("msg", "shutdown error", "err", err)
+			_ = level.Error(logger).Log("msg", "shutdown error", "err", err)
 		}
 	}
 }

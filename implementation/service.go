@@ -4,8 +4,8 @@ import (
 	"context"
 	"time"
 
-	"github.com/go-kit/kit/log"
-	"github.com/go-kit/kit/log/level"
+	"github.com/go-kit/log"
+	"github.com/go-kit/log/level"
 	"github.com/google/uuid"
 
 	"example.com/order-service/order"
@@ -32,7 +32,7 @@ func (s *service) Create(ctx context.Context, o order.Order) (string, error) {
 	o.CreatedOn = time.Now().Unix()
 
 	if err := s.repository.CreateOrder(ctx, o); err != nil {
-		level.Error(logger).Log("err", err)
+		_ = level.Error(logger).Log("err", err)
 		return "", order.ErrCmdRepository
 	}
 
@@ -44,7 +44,7 @@ func (s *service) GetByID(ctx context.Context, id string) (order.Order, error) {
 
 	o, err := s.repository.GetOrderByID(ctx, id)
 	if err != nil {
-		level.Error(logger).Log("err", err)
+		_ = level.Error(logger).Log("err", err)
 		return o, order.ErrOrderNotFound
 	}
 
@@ -55,7 +55,7 @@ func (s *service) ChangeStatus(ctx context.Context, id, status string) error {
 	logger := log.With(s.logger, "method", "ChangeStatus")
 
 	if err := s.repository.ChangeOrderStatus(ctx, id, status); err != nil {
-		level.Error(logger).Log("err", err)
+		_ = level.Error(logger).Log("err", err)
 		return order.ErrCmdRepository
 	}
 
