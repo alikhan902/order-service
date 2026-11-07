@@ -42,3 +42,10 @@ func TestMissingOrder(t *testing.T) {
 		t.Fatalf("update: %v", err)
 	}
 }
+
+func TestChangeStatusWithEmptyID(t *testing.T) {
+	svc := implementation.NewService(repository.NewMemoryRepository(), log.NewNopLogger())
+	if err := svc.ChangeStatus(context.Background(), "", "Ready"); !errors.Is(err, order.ErrCmdRepository) {
+		t.Fatalf("empty id: %v", err)
+	}
+}
